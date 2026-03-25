@@ -12,37 +12,37 @@ export default function ProjectStatus({ projects }) {
         return (
           <div
             key={project.id}
-            className="bg-steel-800 border border-steel-600 rounded-xl p-4 flex flex-col gap-2"
+            className="bg-steel-800 border border-steel-600 rounded-md p-4 flex flex-col gap-2"
           >
             {/* Header row */}
             <div className="flex items-start justify-between gap-2">
               <div>
-                <h3 className="text-white font-bold text-sm leading-tight">{project.name}</h3>
-                <p className="text-slate-400 text-xs mt-0.5">{project.phase}</p>
+                <h3 className="text-white font-semibold text-sm leading-tight">{project.name}</h3>
+                <p className="text-slate-500 text-xs mt-0.5 uppercase tracking-wide">{project.phase}</p>
               </div>
-              <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium bg-steel-700 ${sc.text} shrink-0`}>
+              <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium bg-steel-700 ${sc.text} shrink-0`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
                 {sc.label}
               </span>
             </div>
 
             {/* Status note */}
-            <p className="text-slate-300 text-xs italic leading-relaxed">{project.statusNote}</p>
+            <p className="text-slate-400 text-xs leading-relaxed">{project.statusNote}</p>
 
             {/* Current step */}
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-slate-500 text-xs shrink-0">↳</span>
+              <span className="text-slate-600 text-xs shrink-0 font-mono">NEXT</span>
               <p className="text-slate-400 text-xs truncate" title={project.currentStep}>
                 {project.currentStep}
               </p>
             </div>
 
             {/* Footer row */}
-            <div className="flex items-center justify-between mt-1 pt-2 border-t border-steel-600">
-              <span className="bg-accent/20 text-accent text-xs font-semibold px-2 py-0.5 rounded-full">
-                {project.stepsRemaining} steps left
+            <div className="flex items-center justify-between mt-1 pt-2 border-t border-steel-700">
+              <span className="bg-accent/10 text-accent text-xs font-semibold px-2 py-0.5 rounded font-mono">
+                {project.stepsRemaining} steps
               </span>
-              <span className="text-slate-500 text-xs">{project.lastUpdated}</span>
+              <span className="text-slate-600 text-xs font-mono">{project.lastUpdated}</span>
             </div>
           </div>
         )

@@ -26,7 +26,7 @@ export default function CalendarStrip({ calendar }) {
   return (
     <div className="flex flex-col gap-4">
       {/* Date header */}
-      <div className="bg-steel-800 border border-steel-600 rounded-xl p-4">
+      <div className="bg-steel-800 border border-steel-600 rounded-md p-4">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-accent text-xs font-semibold uppercase tracking-wider">Today</span>
         </div>
@@ -39,20 +39,19 @@ export default function CalendarStrip({ calendar }) {
       </div>
 
       {calendar.events?.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12 gap-3">
-          <span className="text-4xl">📅</span>
+        <div className="flex flex-col items-center justify-center py-12 gap-2">
           <p className="text-slate-500 text-sm">No events scheduled today</p>
-          <p className="text-slate-600 text-xs">Calendar syncs every 2 hours via Jarvis</p>
+          <p className="text-slate-600 text-xs uppercase tracking-wider">Syncs every 2 hrs via Jarvis</p>
         </div>
       ) : (
         <div className="flex flex-col gap-2">
           {/* All-day events */}
           {allDay.map((event, i) => (
-            <div key={i} className="bg-steel-800 border border-steel-600 rounded-lg p-3 flex items-center gap-3">
+            <div key={i} className="bg-steel-800 border border-steel-600 rounded-md p-3 flex items-center gap-3">
               <div className="flex flex-col items-center gap-1 w-12 shrink-0">
                 <span className="text-slate-500 text-xs">All day</span>
               </div>
-              <div className={`w-0.5 self-stretch rounded-full ${calendarColorMap[event.calendar] || 'bg-accent'}`} />
+              <div className={`w-0.5 self-stretch ${calendarColorMap[event.calendar] || 'bg-accent'}`} />
               <div className="flex-1">
                 <p className="text-white text-sm font-medium">{event.title}</p>
                 {event.calendar && (
@@ -67,16 +66,16 @@ export default function CalendarStrip({ calendar }) {
 
           {/* Timed events */}
           {timed.map((event, i) => (
-            <div key={i} className="bg-steel-800 border border-steel-600 rounded-lg p-3 flex items-center gap-3">
+            <div key={i} className="bg-steel-800 border border-steel-600 rounded-md p-3 flex items-center gap-3">
               <div className="flex flex-col items-center gap-0.5 w-14 shrink-0 text-right">
                 <span className="text-slate-300 text-xs font-medium">{formatTime(event.start)}</span>
                 {event.end && <span className="text-slate-600 text-xs">{formatTime(event.end)}</span>}
               </div>
-              <div className={`w-0.5 self-stretch rounded-full ${calendarColorMap[event.calendar] || 'bg-accent'}`} />
+              <div className={`w-0.5 self-stretch ${calendarColorMap[event.calendar] || 'bg-accent'}`} />
               <div className="flex-1">
                 <p className="text-white text-sm font-medium">{event.title}</p>
                 {event.location && (
-                  <p className="text-slate-500 text-xs mt-0.5">📍 {event.location}</p>
+                  <p className="text-slate-500 text-xs mt-0.5 font-mono">{event.location}</p>
                 )}
                 {event.calendar && (
                   <div className="flex items-center gap-1.5 mt-0.5">

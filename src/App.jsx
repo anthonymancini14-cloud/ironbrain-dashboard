@@ -32,15 +32,15 @@ function PinGate({ children }) {
 
   return (
     <div className="min-h-screen bg-steel-900 flex items-center justify-center px-4">
-      <div className="bg-steel-800 p-8 rounded-2xl border border-steel-600 w-full max-w-xs shadow-2xl">
+      <div className="bg-steel-800 p-8 rounded-md border border-steel-600 w-full max-w-xs">
         {/* Logo mark */}
         <div className="flex items-center justify-center mb-6">
-          <div className="w-12 h-12 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center">
-            <span className="text-accent font-bold text-lg tracking-tighter">IB</span>
+          <div className="w-12 h-12 rounded bg-accent/10 border border-accent/20 flex items-center justify-center">
+            <span className="text-accent font-bold text-base tracking-widest font-mono">IB</span>
           </div>
         </div>
-        <h1 className="text-white text-xl font-bold mb-1 text-center">IronBrain HQ</h1>
-        <p className="text-slate-400 text-sm mb-6 text-center">Enter PIN to continue</p>
+        <h1 className="text-white text-lg font-bold mb-1 text-center tracking-wide">IronBrain HQ</h1>
+        <p className="text-slate-500 text-xs mb-6 text-center uppercase tracking-wider">Enter PIN to continue</p>
         <form onSubmit={handleSubmit}>
           <input
             type="password"
@@ -48,18 +48,18 @@ function PinGate({ children }) {
             pattern="[0-9]*"
             value={input}
             onChange={e => setInput(e.target.value)}
-            className="w-full bg-steel-700 text-white rounded-xl p-3 mb-3 border border-steel-500 focus:border-accent outline-none text-center text-2xl tracking-[0.5em] placeholder:tracking-normal"
+            className="w-full bg-steel-700 text-white rounded p-3 mb-3 border border-steel-500 focus:border-accent outline-none text-center text-2xl tracking-widest placeholder:tracking-normal"
             placeholder="••••"
             autoFocus
           />
           {error && (
-            <p className="text-status-red text-sm mb-3 text-center animate-pulse">
+            <p className="text-status-red text-xs mb-3 text-center uppercase tracking-wider">
               Incorrect PIN
             </p>
           )}
           <button
             type="submit"
-            className="w-full bg-accent hover:bg-blue-500 text-white rounded-xl p-3 font-semibold transition-colors"
+            className="w-full bg-accent hover:bg-blue-500 text-white rounded p-3 font-semibold transition-colors text-sm tracking-wide"
           >
             Unlock
           </button>
@@ -72,9 +72,9 @@ function PinGate({ children }) {
 // ─── Dashboard ───────────────────────────────────────────────────────────────
 
 const TABS = [
-  { id: 'projects', label: 'Projects', icon: '⬡' },
-  { id: 'tasks',    label: 'Tasks',    icon: '✓' },
-  { id: 'calendar', label: 'Calendar', icon: '◈' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'tasks',    label: 'Tasks'    },
+  { id: 'calendar', label: 'Calendar' },
 ]
 
 function Dashboard() {
@@ -83,27 +83,27 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-steel-900 text-white flex flex-col">
       {/* Top bar */}
-      <div className="sticky top-0 z-10 bg-steel-800 border-b border-steel-600 px-4 py-3 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <span className="w-6 h-6 rounded bg-accent/20 border border-accent/30 flex items-center justify-center text-accent font-bold text-xs">IB</span>
-          <h1 className="font-bold text-accent text-base tracking-wide">IronBrain HQ</h1>
+      <div className="sticky top-0 z-10 bg-steel-800 border-b border-steel-600 px-4 py-2.5 flex justify-between items-center">
+        <div className="flex items-center gap-2.5">
+          <span className="text-accent font-bold text-sm font-mono tracking-widest">IB</span>
+          <span className="text-steel-600">|</span>
+          <h1 className="font-semibold text-slate-200 text-sm tracking-wide">IronBrain HQ</h1>
         </div>
-        <span className="text-slate-500 text-xs">Updated {data.meta.lastUpdated}</span>
+        <span className="text-slate-600 text-xs font-mono">{data.meta.lastUpdated}</span>
       </div>
 
       {/* Tab bar */}
-      <div className="sticky top-[52px] z-10 bg-steel-800 border-b border-steel-600 flex">
+      <div className="sticky top-[45px] z-10 bg-steel-800 border-b border-steel-600 flex">
         {TABS.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-1.5 ${
+            className={`flex-1 py-2.5 text-xs font-semibold transition-colors uppercase tracking-wider ${
               activeTab === tab.id
                 ? 'text-accent border-b-2 border-accent'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-500 hover:text-slate-300'
             }`}
           >
-            <span className="text-xs opacity-70">{tab.icon}</span>
             {tab.label}
           </button>
         ))}
