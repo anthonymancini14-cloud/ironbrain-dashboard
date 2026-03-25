@@ -1,0 +1,162 @@
+{
+  "meta": {
+    "lastUpdated": "2026-03-25",
+    "version": "1.0",
+    "updatedBy": "jarvis"
+  },
+  "projects": [
+    {
+      "id": "cmms",
+      "name": "AI-Native CMMS",
+      "phase": "Phase 1 — Work Orders",
+      "status": "yellow",
+      "statusNote": "P1-0a pending — in Jarvis execution queue",
+      "stepsRemaining": 12,
+      "currentStep": "P1-0a: Rename migration file",
+      "lastUpdated": "2026-03-24"
+    },
+    {
+      "id": "bambam",
+      "name": "BamBam Consulting",
+      "phase": "Pre-Client Acquisition",
+      "status": "yellow",
+      "statusNote": "Hardware pending — attorney consult required before first engagement",
+      "stepsRemaining": 5,
+      "currentStep": "Acquire BamBam hardware (HP OmniBook, DJI Mic 2)",
+      "lastUpdated": "2026-03-24"
+    },
+    {
+      "id": "gumroad",
+      "name": "Gumroad Store",
+      "phase": "Post-Launch",
+      "status": "green",
+      "statusNote": "4 products live — LinkedIn post and Upwork link pending",
+      "stepsRemaining": 3,
+      "currentStep": "Post launch announcement on LinkedIn",
+      "lastUpdated": "2026-03-22"
+    },
+    {
+      "id": "vaultcapture",
+      "name": "VaultCapture PWA",
+      "phase": "Rebuild in Base44",
+      "status": "red",
+      "statusNote": "Old Netlify version live — Base44 rebuild not yet started",
+      "stepsRemaining": 4,
+      "currentStep": "Build in Base44, register Azure app for OneDrive",
+      "lastUpdated": "2026-03-24"
+    },
+    {
+      "id": "ironbrain-os",
+      "name": "IronBrain OS",
+      "phase": "Active Infrastructure",
+      "status": "green",
+      "statusNote": "All systems operational — EB backlog executing on Jarvis",
+      "stepsRemaining": 6,
+      "currentStep": "Jarvis: Execute EB backlog in order",
+      "lastUpdated": "2026-03-25"
+    }
+  ],
+  "tasks": {
+    "open": [
+      {
+        "id": "t001",
+        "title": "Post Gumroad launch on LinkedIn",
+        "project": "gumroad",
+        "priority": "high",
+        "scope": "S",
+        "owner": "anthony",
+        "notes": "Copy from Gumroad Launch Guide post-launch section. Post while momentum is fresh."
+      },
+      {
+        "id": "t002",
+        "title": "Run IronBrain HQ EB backlog on Jarvis",
+        "project": "ironbrain-os",
+        "priority": "high",
+        "scope": "M",
+        "owner": "jarvis",
+        "notes": "EB-1 (Shell + Core Panels) first. EB-2 (Metrics/Contacts/Briefs/Hangar/Maps) blocked until EB-1 deploys."
+      },
+      {
+        "id": "t003",
+        "title": "Acquire BamBam hardware",
+        "project": "bambam",
+        "priority": "medium",
+        "scope": "S",
+        "owner": "anthony",
+        "notes": "HP OmniBook + DJI Mic 2 + HP P500 SSD + hub via HP employee discount portal."
+      },
+      {
+        "id": "t004",
+        "title": "Oregon startup attorney consult",
+        "project": "bambam",
+        "priority": "medium",
+        "scope": "S",
+        "owner": "anthony",
+        "notes": "Hard gate before first paid engagement or any GP approach."
+      },
+      {
+        "id": "t005",
+        "title": "Start CMMS Phase 1 — P1-0a first",
+        "project": "cmms",
+        "priority": "medium",
+        "scope": "M",
+        "owner": "jarvis",
+        "notes": "After EB backlog is cleared. Rename migration file, then P1-1 through P1-11."
+      },
+      {
+        "id": "t006",
+        "title": "GP onboarding docs review",
+        "project": "cmms",
+        "priority": "medium",
+        "scope": "S",
+        "owner": "anthony",
+        "notes": "Run gp-onboarding-docs-review task when docs arrive. Legal gate — do not skip."
+      },
+      {
+        "id": "t007",
+        "title": "Desktop RAM upgrade",
+        "project": "ironbrain-os",
+        "priority": "low",
+        "scope": "S",
+        "owner": "anthony",
+        "notes": "32GB DDR4 + 2TB NVMe SSD (~$200 total). PSU check before any GPU decision."
+      }
+    ],
+    "recentlyCompleted": [
+      {
+        "id": "tc001",
+        "title": "IronBrain HQ EB-1 — Shell and Core Panels",
+        "project": "ironbrain-os",
+        "completedDate": "2026-03-25"
+      },
+      {
+        "id": "tc002",
+        "title": "Planning Session 3 — YouTube Intel Pipeline + IronBrain HQ",
+        "project": "ironbrain-os",
+        "completedDate": "2026-03-25"
+      },
+      {
+        "id": "tc003",
+        "title": "OS Guide Maintenance — manual run completed",
+        "project": "ironbrain-os",
+        "completedDate": "2026-03-24"
+      },
+      {
+        "id": "tc004",
+        "title": "Push notifications fully operational — all 4 scripts registered",
+        "project": "ironbrain-os",
+        "completedDate": "2026-03-24"
+      },
+      {
+        "id": "tc005",
+        "title": "Gumroad Store launched — 4 products live",
+        "project": "gumroad",
+        "completedDate": "2026-03-22"
+      }
+    ]
+  },
+  "calendar": {
+    "date": "2026-03-25",
+    "events": []
+  }
+}
