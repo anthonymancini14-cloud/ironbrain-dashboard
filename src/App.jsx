@@ -1,8 +1,13 @@
 import { useState } from 'react'
 import data from './data/dashboard.json'
-import ProjectStatus from './components/ProjectStatus'
-import TaskView from './components/TaskView'
-import CalendarStrip from './components/CalendarStrip'
+import ProjectStatus  from './components/ProjectStatus'
+import TaskView       from './components/TaskView'
+import CalendarStrip  from './components/CalendarStrip'
+import MetricsPanel   from './components/MetricsPanel'
+import ContactsPanel  from './components/ContactsPanel'
+import BriefViewer    from './components/BriefViewer'
+import HangarPanel    from './components/HangarPanel'
+import MindMapPanel   from './components/MindMapPanel'
 
 // ─── PIN Gate ────────────────────────────────────────────────────────────────
 
@@ -75,6 +80,11 @@ const TABS = [
   { id: 'projects', label: 'Projects' },
   { id: 'tasks',    label: 'Tasks'    },
   { id: 'calendar', label: 'Calendar' },
+  { id: 'metrics',  label: 'Metrics'  },
+  { id: 'contacts', label: 'Contacts' },
+  { id: 'briefs',   label: 'Briefs'   },
+  { id: 'hangar',   label: 'Hangar'   },
+  { id: 'maps',     label: 'Maps'     },
 ]
 
 function Dashboard() {
@@ -92,21 +102,23 @@ function Dashboard() {
         <span className="text-slate-600 text-xs font-mono">{data.meta.lastUpdated}</span>
       </div>
 
-      {/* Tab bar */}
-      <div className="sticky top-[45px] z-10 bg-steel-800 border-b border-steel-600 flex">
-        {TABS.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 py-2.5 text-xs font-semibold transition-colors uppercase tracking-wider ${
-              activeTab === tab.id
-                ? 'text-accent border-b-2 border-accent'
-                : 'text-slate-500 hover:text-slate-300'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Tab bar — horizontal scroll for 8 tabs on mobile */}
+      <div className="sticky top-[45px] z-10 bg-steel-800 border-b border-steel-600 overflow-x-auto">
+        <div className="inline-flex min-w-full">
+          {TABS.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-shrink-0 px-4 py-2.5 text-xs font-semibold transition-colors uppercase tracking-wider whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'text-accent border-b-2 border-accent'
+                  : 'text-slate-500 hover:text-slate-300'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Content */}
@@ -114,6 +126,11 @@ function Dashboard() {
         {activeTab === 'projects' && <ProjectStatus projects={data.projects} />}
         {activeTab === 'tasks'    && <TaskView tasks={data.tasks} />}
         {activeTab === 'calendar' && <CalendarStrip calendar={data.calendar} />}
+        {activeTab === 'metrics'  && <MetricsPanel metrics={data.metrics} />}
+        {activeTab === 'contacts' && <ContactsPanel contacts={data.contacts} />}
+        {activeTab === 'briefs'   && <BriefViewer briefs={data.briefs} />}
+        {activeTab === 'hangar'   && <HangarPanel systemStatus={data.systemStatus} />}
+        {activeTab === 'maps'     && <MindMapPanel />}
       </div>
     </div>
   )

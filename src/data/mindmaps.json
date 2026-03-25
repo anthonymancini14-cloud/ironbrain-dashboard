@@ -1,0 +1,68 @@
+{
+  "maps": [
+    {
+      "id": "cmms",
+      "title": "CMMS Build Phases",
+      "description": "6-phase build roadmap from Foundation to Aviation MRO",
+      "nodes": [
+        { "id": "root",  "label": "AI-Native CMMS",         "status": "active",    "type": "root",  "children": ["p0","p1","p2","p3","p4","p5"] },
+        { "id": "p0",    "label": "Phase 0\nFoundation",     "status": "completed", "type": "phase", "children": ["p0-1","p0-2"] },
+        { "id": "p0-1",  "label": "Auth + DB Schema",        "status": "completed", "type": "task",  "children": [] },
+        { "id": "p0-2",  "label": "App Live on Vercel",      "status": "completed", "type": "task",  "children": [] },
+        { "id": "p1",    "label": "Phase 1\nWork Orders",    "status": "active",    "type": "phase", "children": ["p1-1","p1-2","p1-3"] },
+        { "id": "p1-1",  "label": "Asset Management",        "status": "pending",   "type": "task",  "children": [] },
+        { "id": "p1-2",  "label": "Work Order Lifecycle",    "status": "pending",   "type": "task",  "children": [] },
+        { "id": "p1-3",  "label": "After-Action Debrief",    "status": "pending",   "type": "task",  "children": [] },
+        { "id": "p2",    "label": "Phase 2\nPM & Scheduling","status": "future",    "type": "phase", "children": [] },
+        { "id": "p3",    "label": "Phase 3\nAI Layer",       "status": "future",    "type": "phase", "children": [] },
+        { "id": "p4",    "label": "Phase 4\nIntegrations",   "status": "future",    "type": "phase", "children": [] },
+        { "id": "p5",    "label": "Phase 5\nAR/Wearables",   "status": "future",    "type": "phase", "children": [] }
+      ]
+    },
+    {
+      "id": "bambam",
+      "title": "BamBam KC Pipeline",
+      "description": "Institutional knowledge capture engagement flow",
+      "nodes": [
+        { "id": "root",    "label": "BamBam\nEngagement",       "status": "active",  "type": "root",  "children": ["pre","intake","interview","produce","deliver"] },
+        { "id": "pre",     "label": "Pre-Client\nAcquisition",  "status": "active",  "type": "phase", "children": ["pre-1","pre-2","pre-3"] },
+        { "id": "pre-1",   "label": "Hardware",                 "status": "pending", "type": "task",  "children": [] },
+        { "id": "pre-2",   "label": "Attorney Consult",         "status": "pending", "type": "task",  "children": [] },
+        { "id": "pre-3",   "label": "Trial: Father",            "status": "pending", "type": "task",  "children": [] },
+        { "id": "intake",  "label": "Client Intake",            "status": "future",  "type": "phase", "children": ["intake-1","intake-2"] },
+        { "id": "intake-1","label": "Config Selection\n(A/B/C)","status": "future",  "type": "task",  "children": [] },
+        { "id": "intake-2","label": "Folder Setup",             "status": "future",  "type": "task",  "children": [] },
+        { "id": "interview","label": "Interview\nSessions",     "status": "future",  "type": "phase", "children": ["int-1","int-2"] },
+        { "id": "int-1",   "label": "Record + Transcript",      "status": "future",  "type": "task",  "children": [] },
+        { "id": "int-2",   "label": "Claude Processing",        "status": "future",  "type": "task",  "children": [] },
+        { "id": "produce", "label": "Document\nProduction",     "status": "future",  "type": "phase", "children": ["prod-1","prod-2"] },
+        { "id": "prod-1",  "label": "KC Documents",             "status": "future",  "type": "task",  "children": [] },
+        { "id": "prod-2",  "label": "Legacy Book",              "status": "future",  "type": "task",  "children": [] },
+        { "id": "deliver", "label": "Delivery\n+ Review",       "status": "future",  "type": "phase", "children": [] }
+      ]
+    },
+    {
+      "id": "ironbrain-os",
+      "title": "IronBrain OS Structure",
+      "description": "The personal AI operating system layer",
+      "nodes": [
+        { "id": "root",    "label": "IronBrain OS",             "status": "active",    "type": "root",  "children": ["vault","automation","skills","accounts"] },
+        { "id": "vault",   "label": "Vault\n(Obsidian)",        "status": "active",    "type": "phase", "children": ["v1","v2","v3"] },
+        { "id": "v1",      "label": "14-Folder Structure",      "status": "completed", "type": "task",  "children": [] },
+        { "id": "v2",      "label": "Vault Guard\n(9 PM daily)","status": "completed", "type": "task",  "children": [] },
+        { "id": "v3",      "label": "Human Inbox",              "status": "completed", "type": "task",  "children": [] },
+        { "id": "automation","label": "Automation\nStack",      "status": "active",    "type": "phase", "children": ["a1","a2","a3"] },
+        { "id": "a1",      "label": "Task Scheduler\n(Windows)","status": "completed", "type": "task",  "children": [] },
+        { "id": "a2",      "label": "Pushover\nNotifications",  "status": "completed", "type": "task",  "children": [] },
+        { "id": "a3",      "label": "Morning Brief\n(6 AM)",    "status": "completed", "type": "task",  "children": [] },
+        { "id": "skills",  "label": "Skill Stack",              "status": "active",    "type": "phase", "children": ["s1","s2","s3"] },
+        { "id": "s1",      "label": "8 Custom Skills\nInstalled","status": "completed","type": "task",  "children": [] },
+        { "id": "s2",      "label": "Plugin Stack\n(7 plugins)","status": "completed", "type": "task",  "children": [] },
+        { "id": "s3",      "label": "Skill Registry",           "status": "completed", "type": "task",  "children": [] },
+        { "id": "accounts","label": "Two-Account\nFramework",   "status": "active",    "type": "phase", "children": ["ac1","ac2"] },
+        { "id": "ac1",     "label": "Jarvis\n(Workhorse)",      "status": "completed", "type": "task",  "children": [] },
+        { "id": "ac2",     "label": "Ultron\n(Planning)",       "status": "completed", "type": "task",  "children": [] }
+      ]
+    }
+  ]
+}

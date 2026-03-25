@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <defs>
+    <filter id="accentGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.29  0 0 0 0 0.62  0 0 0 0 1  0 0 0 0.6 0" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e2a3a"/>
+      <stop offset="100%" stop-color="#0a0e1a"/>
+    </linearGradient>
+    <linearGradient id="wallGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f1825"/>
+      <stop offset="100%" stop-color="#1a2535"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="240" fill="#0a0e1a"/>
+
+  <!-- Hangar floor perspective -->
+  <polygon points="0,240 400,240 310,140 90,140" fill="url(#floorGrad)"/>
+
+  <!-- Hangar walls (side panels) -->
+  <polygon points="0,240 0,60 90,140" fill="url(#wallGrad)" opacity="0.8"/>
+  <polygon points="400,240 400,60 310,140" fill="url(#wallGrad)" opacity="0.8"/>
+
+  <!-- Hangar ceiling / back wall -->
+  <polygon points="0,60 400,60 310,140 90,140" fill="#0d1520" opacity="0.9"/>
+
+  <!-- Hangar depth lines (perspective grid) -->
+  <line x1="200" y1="60" x2="0" y2="240"   stroke="#1e2d42" stroke-width="0.5" opacity="0.5"/>
+  <line x1="200" y1="60" x2="133" y2="240" stroke="#1e2d42" stroke-width="0.5" opacity="0.5"/>
+  <line x1="200" y1="60" x2="266" y2="240" stroke="#1e2d42" stroke-width="0.5" opacity="0.5"/>
+  <line x1="200" y1="60" x2="400" y2="240" stroke="#1e2d42" stroke-width="0.5" opacity="0.5"/>
+
+  <!-- Horizontal grid lines -->
+  <line x1="55"  y1="170" x2="345" y2="170" stroke="#1e2d42" stroke-width="0.5" opacity="0.4"/>
+  <line x1="30"  y1="200" x2="370" y2="200" stroke="#1e2d42" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Overhead lighting strips -->
+  <rect x="160" y="62" width="80" height="3" fill="#4a9eff" opacity="0.15"/>
+  <rect x="140" y="67" width="120" height="2" fill="#4a9eff" opacity="0.10"/>
+
+  <!-- F-15 silhouette (3/4 top-down view, center frame) -->
+  <!-- Fuselage -->
+  <ellipse cx="200" cy="155" rx="10" ry="42" fill="#4a5568" filter="url(#accentGlow)"/>
+  <!-- Nose cone -->
+  <polygon points="200,108 194,128 206,128" fill="#5a6a7e"/>
+  <!-- Canopy -->
+  <ellipse cx="200" cy="135" rx="6" ry="9" fill="#2d3d52"/>
+
+  <!-- Left wing -->
+  <polygon points="190,145 130,175 140,185 190,163" fill="#4a5568"/>
+  <!-- Right wing -->
+  <polygon points="210,145 270,175 260,185 210,163" fill="#4a5568"/>
+
+  <!-- Left stabilizer -->
+  <polygon points="193,175 160,193 163,198 194,183" fill="#3d4e5e"/>
+  <!-- Right stabilizer -->
+  <polygon points="207,175 240,193 237,198 206,183" fill="#3d4e5e"/>
+
+  <!-- Twin vertical tails (angled) -->
+  <polygon points="195,175 190,168 193,168 198,175" fill="#5a6a7e"/>
+  <polygon points="205,175 210,168 207,168 202,175" fill="#5a6a7e"/>
+
+  <!-- Engine nacelles -->
+  <ellipse cx="191" cy="166" rx="4" ry="10" fill="#3a4a5a"/>
+  <ellipse cx="209" cy="166" rx="4" ry="10" fill="#3a4a5a"/>
+
+  <!-- Engine glow -->
+  <ellipse cx="191" cy="176" rx="3" ry="2" fill="#4a9eff" opacity="0.35"/>
+  <ellipse cx="209" cy="176" rx="3" ry="2" fill="#4a9eff" opacity="0.35"/>
+
+  <!-- Accent highlight on fuselage -->
+  <ellipse cx="200" cy="135" rx="2" ry="6" fill="#4a9eff" opacity="0.2"/>
+
+  <!-- Crew silhouettes (3 figures, simple geometric) -->
+  <!-- Crew 1 (left) -->
+  <circle cx="145" cy="178" r="5" fill="#374151"/>
+  <rect x="141" y="183" width="8" height="14" rx="1" fill="#2d3748"/>
+  <rect x="141" y="195" width="3" height="8"  rx="1" fill="#2d3748"/>
+  <rect x="146" y="195" width="3" height="8"  rx="1" fill="#2d3748"/>
+
+  <!-- Crew 2 (right) -->
+  <circle cx="255" cy="178" r="5" fill="#374151"/>
+  <rect x="251" y="183" width="8" height="14" rx="1" fill="#2d3748"/>
+  <rect x="251" y="195" width="3" height="8"  rx="1" fill="#2d3748"/>
+  <rect x="256" y="195" width="3" height="8"  rx="1" fill="#2d3748"/>
+
+  <!-- Crew 3 (front-left, slightly smaller — distance) -->
+  <circle cx="170" cy="195" r="4" fill="#2d3748"/>
+  <rect x="167" y="199" width="6" height="11" rx="1" fill="#263040"/>
+  <rect x="167" y="208" width="2.5" height="6" rx="1" fill="#263040"/>
+  <rect x="171" y="208" width="2.5" height="6" rx="1" fill="#263040"/>
+
+  <!-- Ground crew tools (wrench + stand, subtle) -->
+  <rect x="228" y="187" width="2" height="16" fill="#2d3748" opacity="0.6"/>
+  <rect x="225" y="186" width="8"  height="2" fill="#2d3748" opacity="0.6"/>
+
+  <!-- Subtle floor reflection of aircraft -->
+  <ellipse cx="200" cy="210" rx="30" ry="6" fill="#4a9eff" opacity="0.04"/>
+
+  <!-- Hangar door frame outline -->
+  <rect x="0"   y="58" width="400" height="4" fill="#0f1825"/>
+  <line x1="0"   y1="62" x2="400" y2="62"  stroke="#1e3a5f" stroke-width="1" opacity="0.4"/>
+</svg>
