@@ -1,0 +1,160 @@
+/* cockpit.css — IronBrain HQ global cockpit aesthetic */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+:root {
+  --scan-opacity: 0.025;
+  --phosphor-green: #00ff41;
+  --phosphor-dim: #00882a;
+  --amber: #ffaa00;
+  --alert-red: #ff2020;
+  --cockpit-bg: #030d07;
+  --panel-border: #0d3318;
+  --panel-border-hot: #00ff41;
+}
+
+/* Global body */
+body {
+  background-color: var(--cockpit-bg);
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', 'Courier New', monospace;
+  color: #d4f0d4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scanline overlay — applied to the root app wrapper */
+.cockpit-root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, var(--scan-opacity)) 2px,
+    rgba(0, 0, 0, var(--scan-opacity)) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Phosphor text glow */
+.phosphor-text {
+  color: var(--phosphor-green);
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.6);
+}
+
+/* Amber text */
+.amber-text {
+  color: var(--amber);
+  text-shadow: 0 0 6px rgba(255, 170, 0, 0.5);
+}
+
+/* Alert red */
+.alert-text {
+  color: var(--alert-red);
+  text-shadow: 0 0 6px rgba(255, 32, 32, 0.6);
+}
+
+/* MFD panel bezel — applied to every panel container */
+.mfd-panel {
+  background-color: #050f09;
+  border: 1px solid var(--panel-border);
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.6), 0 0 1px rgba(0,255,65,0.1);
+  border-radius: 2px;
+  position: relative;
+}
+
+/* MFD panel with active state (selected tab content) */
+.mfd-panel-hot {
+  border-color: var(--panel-border-hot);
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.6), 0 0 8px rgba(0,255,65,0.15);
+}
+
+/* MFD panel header bar */
+.mfd-header {
+  background-color: #071a0c;
+  border-bottom: 1px solid var(--panel-border);
+  padding: 4px 10px;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--phosphor-green);
+  text-shadow: 0 0 4px rgba(0,255,65,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Status annunciator dot */
+.annunciator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.annunciator-green  { background: var(--phosphor-green); box-shadow: 0 0 4px rgba(0,255,65,0.8); }
+.annunciator-amber  { background: var(--amber); box-shadow: 0 0 4px rgba(255,170,0,0.8); }
+.annunciator-red    { background: var(--alert-red); box-shadow: 0 0 4px rgba(255,32,32,0.8); }
+.annunciator-dim    { background: #1a4a1f; }
+
+/* Phosphor progress bar (fuel gauge style) */
+.phosphor-bar-track {
+  background: #001a07;
+  border: 1px solid #0d3318;
+  height: 6px;
+  border-radius: 1px;
+  overflow: hidden;
+}
+.phosphor-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00882a 0%, #00ff41 100%);
+  box-shadow: 0 0 6px rgba(0,255,65,0.5);
+  transition: width 0.3s ease;
+}
+
+/* Phosphor pulse animation — for live/active indicators */
+@keyframes phosphorPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.pulse { animation: phosphorPulse 2s ease-in-out infinite; }
+
+/* Subtle vignette on full-screen panels */
+.vignette::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Corner notch decorations — cockpit MFD style */
+.mfd-panel::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px;
+  width: 8px; height: 8px;
+  border-top: 2px solid var(--phosphor-green);
+  border-left: 2px solid var(--phosphor-green);
+  opacity: 0.5;
+  z-index: 1;
+}
+
+/* Scrollbar hide utility */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Cockpit scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #001a07;
+}
+::-webkit-scrollbar-thumb {
+  background: #0d3318;
+  border-radius: 2px;
+}

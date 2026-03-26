@@ -1,93 +1,135 @@
-const CALENDAR_COLORS = [
-  'bg-accent',
-  'bg-purple-400',
-  'bg-status-green',
-  'bg-status-yellow',
-  'bg-pink-400',
-]
+// CalendarStrip.jsx — ◆ CALENR // FLIGHT PLAN
+// Cockpit redesign: mission timeline, military date format, 24hr time, amber/phosphor rows
 
-function formatDate(dateStr) {
+const mono = 'JetBrains Mono, IBM Plex Mono, monospace'
+
+function formatMilDate(dateStr) {
+  if (!dateStr) return 'UNKNOWN'
   const d = new Date(dateStr + 'T12:00:00')
-  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
+  const day   = String(d.getDate()).padStart(2, '0')
+  const month = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()]
+  const year  = String(d.getFullYear()).slice(-2)
+  return `${day}${month}${year}`
 }
 
-function formatTime(timeStr) {
+function formatMilTime(timeStr) {
   if (!timeStr) return ''
   const d = new Date(timeStr)
-  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+  return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
 }
 
 export default function CalendarStrip({ calendar }) {
-  const allDay = calendar.events?.filter(e => e.allDay) || []
-  const timed  = calendar.events?.filter(e => !e.allDay).sort((a, b) => new Date(a.start) - new Date(b.start)) || []
-  const calendarNames = [...new Set(calendar.events?.map(e => e.calendar) || [])]
-  const calendarColorMap = Object.fromEntries(calendarNames.map((name, i) => [name, CALENDAR_COLORS[i % CALENDAR_COLORS.length]]))
+  const events = calendar.events || []
+  const timed  = events.filter(e => !e.allDay).sort((a, b) => new Date(a.start) - new Date(b.start))
+  const allDay = events.filter(e => e.allDay)
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Date header */}
-      <div className="bg-steel-800 border border-steel-600 rounded-md p-4">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-accent text-xs font-semibold uppercase tracking-wider">Today</span>
+    <div className="h-full flex flex-col overflow-hidden" style={{ fontFamily: mono }}>
+      {/* Panel header */}
+      <div className="mfd-header">
+        <span>◆ CALENR  //  FLIGHT PLAN</span>
+        <div className="flex items-center gap-2">
+          <span style={{ fontSize: '0.5rem', color: '#00882a', letterSpacing: '0.1em' }}>
+            {formatMilDate(calendar.date)}
+          </span>
+          <span className={`annunciator ${events.length > 0 ? 'annunciator-green' : 'annunciator-dim'}`} />
         </div>
-        <h2 className="text-white font-bold text-lg">{formatDate(calendar.date)}</h2>
-        <p className="text-slate-500 text-xs mt-1">
-          {calendar.events?.length === 0
-            ? 'No events scheduled'
-            : `${calendar.events?.length} event${calendar.events?.length !== 1 ? 's' : ''}`}
-        </p>
       </div>
 
-      {calendar.events?.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12 gap-2">
-          <p className="text-slate-500 text-sm">No events scheduled today</p>
-          <p className="text-slate-600 text-xs uppercase tracking-wider">Syncs every 2 hrs via Jarvis</p>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-2">
-          {/* All-day events */}
-          {allDay.map((event, i) => (
-            <div key={i} className="bg-steel-800 border border-steel-600 rounded-md p-3 flex items-center gap-3">
-              <div className="flex flex-col items-center gap-1 w-12 shrink-0">
-                <span className="text-slate-500 text-xs">All day</span>
-              </div>
-              <div className={`w-0.5 self-stretch ${calendarColorMap[event.calendar] || 'bg-accent'}`} />
-              <div className="flex-1">
-                <p className="text-white text-sm font-medium">{event.title}</p>
-                {event.calendar && (
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className={`w-1.5 h-1.5 rounded-full ${calendarColorMap[event.calendar] || 'bg-accent'}`} />
-                    <span className="text-slate-500 text-xs">{event.calendar}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+      {/* Date strip */}
+      <div
+        style={{
+          background: '#001a07',
+          borderBottom: '1px solid #0d3318',
+          padding: '8px 12px',
+          display: 'flex',
+          alignItems: 'baseline',
+          gap: 12,
+        }}
+      >
+        <span className="phosphor-text" style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.05em' }}>
+          {formatMilDate(calendar.date)}
+        </span>
+        <span style={{ fontSize: '0.55rem', color: '#00882a', letterSpacing: '0.12em' }}>
+          ─── TODAY ───
+        </span>
+        <span style={{ fontSize: '0.55rem', color: '#2a4a2f', letterSpacing: '0.1em', marginLeft: 'auto' }}>
+          {events.length === 0 ? 'NO EVENTS' : `${events.length} EVENT${events.length !== 1 ? 'S' : ''}`}
+        </span>
+      </div>
 
-          {/* Timed events */}
-          {timed.map((event, i) => (
-            <div key={i} className="bg-steel-800 border border-steel-600 rounded-md p-3 flex items-center gap-3">
-              <div className="flex flex-col items-center gap-0.5 w-14 shrink-0 text-right">
-                <span className="text-slate-300 text-xs font-medium">{formatTime(event.start)}</span>
-                {event.end && <span className="text-slate-600 text-xs">{formatTime(event.end)}</span>}
-              </div>
-              <div className={`w-0.5 self-stretch ${calendarColorMap[event.calendar] || 'bg-accent'}`} />
-              <div className="flex-1">
-                <p className="text-white text-sm font-medium">{event.title}</p>
-                {event.location && (
-                  <p className="text-slate-500 text-xs mt-0.5 font-mono">{event.location}</p>
-                )}
-                {event.calendar && (
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className={`w-1.5 h-1.5 rounded-full ${calendarColorMap[event.calendar] || 'bg-accent'}`} />
-                    <span className="text-slate-500 text-xs">{event.calendar}</span>
-                  </div>
-                )}
-              </div>
+      {/* Events list */}
+      <div className="flex-1 overflow-auto">
+        {events.length === 0 ? (
+          <div style={{ padding: '32px 0', textAlign: 'center' }}>
+            <div style={{ fontSize: '0.65rem', color: '#2a4a2f', letterSpacing: '0.2em' }}>
+              NO EVENTS LOGGED
             </div>
-          ))}
-        </div>
-      )}
+            <div style={{ fontSize: '0.5rem', color: '#1a3a1f', letterSpacing: '0.12em', marginTop: 6 }}>
+              SYNCS EVERY 2 HRS VIA JARVIS
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* All-day events */}
+            {allDay.map((event, i) => (
+              <div
+                key={`allday-${i}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  gap: 12,
+                  padding: '8px 12px',
+                  borderBottom: '1px solid #0d3318',
+                }}
+              >
+                <span style={{ fontSize: '0.65rem', color: '#664400', letterSpacing: '0.05em', flexShrink: 0, width: 40 }}>
+                  ALLDAY
+                </span>
+                <span className="phosphor-text" style={{ fontSize: '0.7rem', letterSpacing: '0.04em', textTransform: 'uppercase', flex: 1 }}>
+                  {event.title}
+                </span>
+                {event.calendar && (
+                  <span style={{ fontSize: '0.5rem', color: '#2a4a2f', letterSpacing: '0.08em', flexShrink: 0 }}>
+                    {event.calendar.toUpperCase().slice(0, 12)}
+                  </span>
+                )}
+              </div>
+            ))}
+
+            {/* Timed events */}
+            {timed.map((event, i) => (
+              <div
+                key={`timed-${i}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  gap: 12,
+                  padding: '8px 12px',
+                  borderBottom: '1px solid #0d3318',
+                }}
+              >
+                <span className="amber-text" style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.04em', flexShrink: 0, width: 40 }}>
+                  {formatMilTime(event.start)}
+                </span>
+                <span className="phosphor-text" style={{ fontSize: '0.7rem', letterSpacing: '0.04em', textTransform: 'uppercase', flex: 1 }}>
+                  {event.title}
+                </span>
+                {event.end && (
+                  <span style={{ fontSize: '0.5rem', color: '#2a4a2f', letterSpacing: '0.05em', flexShrink: 0 }}>
+                    →{formatMilTime(event.end)}
+                  </span>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div style={{ padding: '5px 12px', background: '#001a07', borderTop: '1px solid #0d3318', fontSize: '0.5rem', color: '#1a3a1f', letterSpacing: '0.1em' }}>
+        GCAL SYNC PENDING — PHASE 2 LIVE CALENDAR
+      </div>
     </div>
   )
 }

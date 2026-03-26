@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import data from './data/dashboard.json'
+import MissionControl from './components/MissionControl'
 import ProjectStatus  from './components/ProjectStatus'
 import TaskView       from './components/TaskView'
 import CalendarStrip  from './components/CalendarStrip'
 import MetricsPanel   from './components/MetricsPanel'
-import ContactsPanel  from './components/ContactsPanel'
 import BriefViewer    from './components/BriefViewer'
 import HangarPanel    from './components/HangarPanel'
-import MindMapPanel   from './components/MindMapPanel'
+// ContactsPanel and MindMapPanel kept as files — removed from active tabs
 
 // ─── PIN Gate ────────────────────────────────────────────────────────────────
 
@@ -36,16 +36,43 @@ function PinGate({ children }) {
   if (verified) return children
 
   return (
-    <div className="min-h-screen bg-steel-900 flex items-center justify-center px-4">
-      <div className="bg-steel-800 p-8 rounded-md border border-steel-600 w-full max-w-xs">
-        {/* Logo mark */}
+    <div
+      className="cockpit-root min-h-screen flex items-center justify-center px-4"
+      style={{ background: '#030d07', fontFamily: 'JetBrains Mono, monospace' }}
+    >
+      <div
+        className="mfd-panel p-8 w-full max-w-xs"
+        style={{ border: '1px solid #0d3318' }}
+      >
+        {/* Corner notch */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0,
+          width: 8, height: 8,
+          borderTop: '2px solid rgba(0,255,65,0.5)',
+          borderLeft: '2px solid rgba(0,255,65,0.5)',
+          pointerEvents: 'none',
+          zIndex: 10,
+        }} />
+
+        {/* Logo */}
         <div className="flex items-center justify-center mb-6">
-          <div className="w-12 h-12 rounded bg-accent/10 border border-accent/20 flex items-center justify-center">
-            <span className="text-accent font-bold text-base tracking-widest font-mono">IB</span>
+          <div
+            style={{
+              width: 48, height: 48,
+              border: '1px solid #0d3318',
+              background: '#001a07',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              borderRadius: 2,
+            }}
+          >
+            <span className="phosphor-text" style={{ fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.2em' }}>IB</span>
           </div>
         </div>
-        <h1 className="text-white text-lg font-bold mb-1 text-center tracking-wide">IronBrain HQ</h1>
-        <p className="text-slate-500 text-xs mb-6 text-center uppercase tracking-wider">Enter PIN to continue</p>
+
+        <div className="mfd-header mb-6 justify-center" style={{ background: 'transparent', borderBottom: '1px solid #0d3318', paddingBottom: 8 }}>
+          <span style={{ fontSize: '0.6rem', letterSpacing: '0.25em' }}>◈ IRONBRAIN HQ // AUTH REQUIRED</span>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <input
             type="password"
@@ -53,20 +80,47 @@ function PinGate({ children }) {
             pattern="[0-9]*"
             value={input}
             onChange={e => setInput(e.target.value)}
-            className="w-full bg-steel-700 text-white rounded p-3 mb-3 border border-steel-500 focus:border-accent outline-none text-center text-2xl tracking-widest placeholder:tracking-normal"
+            style={{
+              width: '100%',
+              background: '#001a07',
+              border: `1px solid ${error ? '#ff2020' : '#0d3318'}`,
+              color: '#00ff41',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '1.5rem',
+              letterSpacing: '0.4em',
+              textAlign: 'center',
+              padding: '12px',
+              outline: 'none',
+              borderRadius: 2,
+              marginBottom: 8,
+              textShadow: '0 0 8px rgba(0,255,65,0.6)',
+            }}
             placeholder="••••"
             autoFocus
           />
           {error && (
-            <p className="text-status-red text-xs mb-3 text-center uppercase tracking-wider">
-              Incorrect PIN
+            <p className="alert-text" style={{ fontSize: '0.6rem', letterSpacing: '0.15em', textAlign: 'center', marginBottom: 8 }}>
+              ⚠ AUTH FAILED — RETRY
             </p>
           )}
           <button
             type="submit"
-            className="w-full bg-accent hover:bg-blue-500 text-white rounded p-3 font-semibold transition-colors text-sm tracking-wide"
+            style={{
+              width: '100%',
+              background: '#071a0c',
+              border: '1px solid #00ff41',
+              color: '#00ff41',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '0.65rem',
+              letterSpacing: '0.2em',
+              padding: '10px',
+              cursor: 'pointer',
+              borderRadius: 2,
+              textShadow: '0 0 4px rgba(0,255,65,0.5)',
+              textTransform: 'uppercase',
+            }}
           >
-            Unlock
+            ◈ AUTHENTICATE
           </button>
         </form>
       </div>
@@ -77,60 +131,87 @@ function PinGate({ children }) {
 // ─── Dashboard ───────────────────────────────────────────────────────────────
 
 const TABS = [
-  { id: 'projects', label: 'Projects' },
-  { id: 'tasks',    label: 'Tasks'    },
-  { id: 'calendar', label: 'Calendar' },
-  { id: 'metrics',  label: 'Metrics'  },
-  { id: 'contacts', label: 'Contacts' },
-  { id: 'briefs',   label: 'Briefs'   },
-  { id: 'hangar',   label: 'Hangar'   },
-  { id: 'maps',     label: 'Maps'     },
+  { id: 'msnctl',   label: 'MSNCTL',  component: (d) => <MissionControl data={d} /> },
+  { id: 'projects', label: 'PRJCTS',  component: (d) => <ProjectStatus projects={d.projects} /> },
+  { id: 'tasks',    label: 'TASKS',   component: (d) => <TaskView tasks={d.tasks} /> },
+  { id: 'calendar', label: 'CALENR',  component: (d) => <CalendarStrip calendar={d.calendar} /> },
+  { id: 'metrics',  label: 'METRCS',  component: (d) => <MetricsPanel metrics={d.metrics} /> },
+  { id: 'briefs',   label: 'BRIEFS',  component: (d) => <BriefViewer briefs={d.briefs} /> },
+  { id: 'hangar',   label: 'HANGAR',  component: (d) => <HangarPanel systemStatus={d.systemStatus} /> },
 ]
 
 function Dashboard() {
-  const [activeTab, setActiveTab] = useState('projects')
+  const [activeTab, setActiveTab] = useState('msnctl')
+
+  const active = TABS.find(t => t.id === activeTab)
 
   return (
-    <div className="min-h-screen bg-steel-900 text-white flex flex-col">
+    <div
+      className="cockpit-root min-h-screen flex flex-col"
+      style={{
+        background: '#030d07',
+        fontFamily: 'JetBrains Mono, IBM Plex Mono, monospace',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
+    >
       {/* Top bar */}
-      <div className="sticky top-0 z-10 bg-steel-800 border-b border-steel-600 px-4 py-2.5 flex justify-between items-center">
-        <div className="flex items-center gap-2.5">
-          <span className="text-accent font-bold text-sm font-mono tracking-widest">IB</span>
-          <span className="text-steel-600">|</span>
-          <h1 className="font-semibold text-slate-200 text-sm tracking-wide">IronBrain HQ</h1>
+      <div
+        className="sticky top-0 z-20 flex justify-between items-center px-4 py-2"
+        style={{ background: '#030d07', borderBottom: '1px solid #0d3318' }}
+      >
+        <div className="flex items-center gap-2" style={{ fontSize: '0.6rem', letterSpacing: '0.2em' }}>
+          <span className="phosphor-text" style={{ fontWeight: 700 }}>◈ IB</span>
+          <span style={{ color: '#0d3318' }}>|</span>
+          <span style={{ color: '#00882a' }}>IRONBRAIN HQ</span>
         </div>
-        <span className="text-slate-600 text-xs font-mono">{data.meta.lastUpdated}</span>
+        <span style={{ color: '#2a4a2f', fontSize: '0.5rem', letterSpacing: '0.1em' }}>
+          {data.meta.lastUpdated}
+        </span>
       </div>
 
-      {/* Tab bar — horizontal scroll for 8 tabs on mobile */}
-      <div className="sticky top-[45px] z-10 bg-steel-800 border-b border-steel-600 overflow-x-auto">
-        <div className="inline-flex min-w-full">
-          {TABS.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-shrink-0 px-4 py-2.5 text-xs font-semibold transition-colors uppercase tracking-wider whitespace-nowrap ${
-                activeTab === tab.id
-                  ? 'text-accent border-b-2 border-accent'
-                  : 'text-slate-500 hover:text-slate-300'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+      {/* Cockpit Tab Bar */}
+      <div
+        className="overflow-x-auto scrollbar-hide sticky z-10"
+        style={{ top: 33, borderBottom: '1px solid #0d3318', background: '#030d07' }}
+      >
+        <div className="flex min-w-max">
+          {TABS.map((tab, i) => {
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className="relative flex flex-col items-center gap-0.5 transition-all"
+                style={{
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '0.55rem',
+                  letterSpacing: '0.2em',
+                  color: isActive ? '#00ff41' : '#00882a',
+                  textShadow: isActive ? '0 0 6px rgba(0,255,65,0.7)' : 'none',
+                  background: isActive ? '#071a0c' : 'transparent',
+                  borderBottom: isActive ? '2px solid #00ff41' : '2px solid transparent',
+                  borderRight: '1px solid #0d3318',
+                  minWidth: 60,
+                  padding: '6px 12px',
+                  cursor: 'pointer',
+                  outline: 'none',
+                }}
+              >
+                <span style={{ fontSize: '0.5rem', color: isActive ? '#00ff41' : '#003010' }}>
+                  {i === 0 ? '◈' : '◆'}
+                </span>
+                <span>{tab.label}</span>
+              </button>
+            )
+          })}
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-4 pb-8 max-w-2xl mx-auto w-full">
-        {activeTab === 'projects' && <ProjectStatus projects={data.projects} />}
-        {activeTab === 'tasks'    && <TaskView tasks={data.tasks} />}
-        {activeTab === 'calendar' && <CalendarStrip calendar={data.calendar} />}
-        {activeTab === 'metrics'  && <MetricsPanel metrics={data.metrics} />}
-        {activeTab === 'contacts' && <ContactsPanel contacts={data.contacts} />}
-        {activeTab === 'briefs'   && <BriefViewer briefs={data.briefs} />}
-        {activeTab === 'hangar'   && <HangarPanel systemStatus={data.systemStatus} />}
-        {activeTab === 'maps'     && <MindMapPanel />}
+      <div className="flex-1 p-3 pb-8 max-w-2xl mx-auto w-full" style={{ minHeight: 0 }}>
+        <div className="mfd-panel mfd-panel-hot h-full flex flex-col overflow-hidden" style={{ minHeight: 'calc(100vh - 120px)' }}>
+          {active && active.component(data)}
+        </div>
       </div>
     </div>
   )

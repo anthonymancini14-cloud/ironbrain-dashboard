@@ -1,3 +1,6 @@
+// MetricsPanel.jsx — ◆ METRCS // SYSTEMS STATUS
+// Cockpit redesign: aircraft systems page, phosphor bars, recharts restyled
+
 import {
   ResponsiveContainer,
   BarChart,
@@ -8,32 +11,48 @@ import {
   Cell,
 } from 'recharts'
 
-const KPI_CARD_CONFIG = [
-  { key: 'tasksCompletedThisWeek',  label: 'Tasks\nThis Week',       color: 'text-accent'       },
-  { key: 'tasksCompletedThisMonth', label: 'Tasks\nThis Month',      color: 'text-status-green'  },
-  { key: 'executionBriefsFiled',    label: 'EBs\nFiled',             color: 'text-white'         },
-  { key: 'briefsRequiringRework',   label: 'EBs\nRework',            color: 'text-status-yellow' },
+const mono = 'JetBrains Mono, IBM Plex Mono, monospace'
+
+const KPI_CONFIG = [
+  { key: 'tasksCompletedThisWeek',  label: 'TASKS / WEEK',        max: 10  },
+  { key: 'tasksCompletedThisMonth', label: 'TASKS / MONTH',       max: 30  },
+  { key: 'executionBriefsFiled',    label: 'EBs FILED',           max: 20  },
+  { key: 'sessionsThisMonth',       label: 'SESSIONS / MONTH',    max: 20  },
 ]
 
-function KpiCard({ label, value, color }) {
+function PhosphorBar({ value, max }) {
+  const pct = Math.max(0, Math.min(100, (value / Math.max(max, 1)) * 100))
   return (
-    <div className="bg-steel-800 border border-steel-600 rounded-md p-3 flex flex-col gap-1">
-      <span className={`text-3xl font-bold font-mono ${color}`}>{value}</span>
-      <span className="text-slate-500 text-xs uppercase tracking-wider leading-tight whitespace-pre-line">
-        {label}
-      </span>
+    <div className="phosphor-bar-track">
+      <div
+        className="phosphor-bar-fill"
+        style={{
+          width: `${pct}%`,
+          background: pct < 30
+            ? '#ff2020'
+            : pct < 70
+              ? 'linear-gradient(90deg, #00882a, #ffaa00)'
+              : undefined,
+        }}
+      />
     </div>
   )
 }
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CockpitTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-steel-700 border border-steel-500 rounded-md px-3 py-2 text-xs">
-      <p className="text-slate-300 font-mono mb-1">{label}</p>
+    <div style={{
+      background: '#050f09',
+      border: '1px solid #0d3318',
+      padding: '6px 10px',
+      fontFamily: mono,
+      fontSize: '0.6rem',
+    }}>
+      <p style={{ color: '#00882a', letterSpacing: '0.1em', marginBottom: 4 }}>{label}</p>
       {payload.map((p, i) => (
-        <p key={i} style={{ color: p.fill }} className="font-mono">
-          {p.name}: {p.value}
+        <p key={i} style={{ color: p.color ?? '#00ff41', letterSpacing: '0.05em' }}>
+          {(p.name ?? '').toUpperCase()}: {p.value}
         </p>
       ))}
     </div>
@@ -44,76 +63,104 @@ export default function MetricsPanel({ metrics }) {
   const { weeklyHistory, executionBriefsFiled, executionBriefsCompleted } = metrics
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* KPI grid */}
-      <div className="grid grid-cols-2 gap-2">
-        {KPI_CARD_CONFIG.map(({ key, label, color }) => (
-          <KpiCard key={key} label={label} value={metrics[key]} color={color} />
+    <div className="h-full flex flex-col overflow-auto" style={{ fontFamily: mono }}>
+      {/* Panel header */}
+      <div className="mfd-header">
+        <span>◆ METRCS  //  SYSTEMS STATUS</span>
+        <span className="annunciator annunciator-green" />
+      </div>
+
+      <div className="flex flex-col gap-0">
+        {/* KPI rows */}
+        {KPI_CONFIG.map(({ key, label, max }) => (
+          <div key={key} style={{ padding: '8px 12px', borderBottom: '1px solid #0d3318' }}>
+            <div className="flex items-baseline justify-between mb-1">
+              <span style={{ fontSize: '0.55rem', color: '#2a4a2f', letterSpacing: '0.15em' }}>
+                {label}
+              </span>
+              <span className="phosphor-text" style={{ fontSize: '0.9rem', fontWeight: 700 }}>
+                {metrics[key] ?? 0}
+              </span>
+            </div>
+            <PhosphorBar value={metrics[key] ?? 0} max={max} />
+          </div>
         ))}
-      </div>
 
-      {/* EB filed vs completed */}
-      <div className="bg-steel-800 border border-steel-600 rounded-md p-3">
-        <p className="text-slate-500 text-xs uppercase tracking-wider mb-1">Execution Briefs</p>
-        <div className="flex items-baseline gap-2">
-          <span className="text-white font-mono text-xl font-semibold">{executionBriefsFiled}</span>
-          <span className="text-slate-500 text-xs">filed</span>
-          <span className="text-steel-500 text-xs">/</span>
-          <span className="text-status-green font-mono text-xl font-semibold">{executionBriefsCompleted}</span>
-          <span className="text-slate-500 text-xs">complete</span>
+        {/* EB Filed vs Complete */}
+        <div style={{ padding: '8px 12px', borderBottom: '1px solid #0d3318' }}>
+          <div style={{ fontSize: '0.55rem', color: '#2a4a2f', letterSpacing: '0.15em', marginBottom: 6 }}>
+            EXECUTION BRIEFS
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="phosphor-text" style={{ fontSize: '1.1rem', fontWeight: 700 }}>
+              {executionBriefsFiled}
+            </span>
+            <span style={{ fontSize: '0.5rem', color: '#00882a', letterSpacing: '0.1em' }}>FILED</span>
+            <span style={{ fontSize: '0.6rem', color: '#0d3318', margin: '0 4px' }}>/</span>
+            <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#00cc34', textShadow: '0 0 4px rgba(0,204,52,0.5)' }}>
+              {executionBriefsCompleted}
+            </span>
+            <span style={{ fontSize: '0.5rem', color: '#00882a', letterSpacing: '0.1em' }}>COMPLETE</span>
+          </div>
         </div>
-      </div>
 
-      {/* Weekly tasks completed bar chart */}
-      <div className="bg-steel-800 border border-steel-600 rounded-md p-3">
-        <p className="text-slate-500 text-xs uppercase tracking-wider mb-3">Weekly Tasks Completed</p>
-        <ResponsiveContainer width="100%" height={160}>
-          <BarChart data={weeklyHistory} barSize={24} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
-            <XAxis
-              dataKey="label"
-              tick={{ fill: '#64748b', fontSize: 10, fontFamily: 'monospace' }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              tick={{ fill: '#64748b', fontSize: 10, fontFamily: 'monospace' }}
-              axisLine={false}
-              tickLine={false}
-              allowDecimals={false}
-            />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(74,158,255,0.06)' }} />
-            <Bar dataKey="completed" name="Completed" radius={[2, 2, 0, 0]}>
-              {weeklyHistory.map((_, i) => (
-                <Cell key={i} fill="#4a9eff" fillOpacity={0.8} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+        {/* Weekly bar chart */}
+        <div style={{ padding: '8px 12px', borderBottom: '1px solid #0d3318' }}>
+          <div style={{ fontSize: '0.55rem', color: '#2a4a2f', letterSpacing: '0.15em', marginBottom: 8 }}>
+            WEEKLY OUTPUT
+          </div>
+          <ResponsiveContainer width="100%" height={120}>
+            <BarChart data={weeklyHistory} barSize={20} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+              <XAxis
+                dataKey="label"
+                tick={{ fill: '#00882a', fontSize: 9, fontFamily: mono }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fill: '#00882a', fontSize: 9, fontFamily: mono }}
+                axisLine={false}
+                tickLine={false}
+                allowDecimals={false}
+              />
+              <Tooltip content={<CockpitTooltip />} cursor={{ fill: 'rgba(0,255,65,0.04)' }} />
+              <Bar dataKey="completed" name="Completed" radius={[2, 2, 0, 0]}>
+                {weeklyHistory.map((_, i) => (
+                  <Cell key={i} fill="#00882a" fillOpacity={0.9} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
 
-      {/* Stacked completed vs rework chart */}
-      <div className="bg-steel-800 border border-steel-600 rounded-md p-3">
-        <p className="text-slate-500 text-xs uppercase tracking-wider mb-1">Completed vs Rework</p>
-        <p className="text-slate-600 text-xs mb-3">A rework bar is a flag</p>
-        <ResponsiveContainer width="100%" height={160}>
-          <BarChart data={weeklyHistory} barSize={24} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
-            <XAxis
-              dataKey="label"
-              tick={{ fill: '#64748b', fontSize: 10, fontFamily: 'monospace' }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              tick={{ fill: '#64748b', fontSize: 10, fontFamily: 'monospace' }}
-              axisLine={false}
-              tickLine={false}
-              allowDecimals={false}
-            />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(74,158,255,0.06)' }} />
-            <Bar dataKey="completed" name="Completed" stackId="a" fill="#22c55e" fillOpacity={0.7} radius={[0, 0, 0, 0]} />
-            <Bar dataKey="rework"    name="Rework"    stackId="a" fill="#f59e0b" fillOpacity={0.8} radius={[2, 2, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+        {/* Completed vs rework chart */}
+        <div style={{ padding: '8px 12px' }}>
+          <div style={{ fontSize: '0.55rem', color: '#2a4a2f', letterSpacing: '0.15em', marginBottom: 4 }}>
+            COMPLETED VS REWORK
+          </div>
+          <div style={{ fontSize: '0.5rem', color: '#1a3a1f', letterSpacing: '0.1em', marginBottom: 8 }}>
+            REWORK BAR = FLAG
+          </div>
+          <ResponsiveContainer width="100%" height={120}>
+            <BarChart data={weeklyHistory} barSize={20} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+              <XAxis
+                dataKey="label"
+                tick={{ fill: '#00882a', fontSize: 9, fontFamily: mono }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fill: '#00882a', fontSize: 9, fontFamily: mono }}
+                axisLine={false}
+                tickLine={false}
+                allowDecimals={false}
+              />
+              <Tooltip content={<CockpitTooltip />} cursor={{ fill: 'rgba(0,255,65,0.04)' }} />
+              <Bar dataKey="completed" name="Completed" stackId="a" fill="#00882a" fillOpacity={0.8} radius={[0, 0, 0, 0]} />
+              <Bar dataKey="rework"    name="Rework"    stackId="a" fill="#ffaa00" fillOpacity={0.9} radius={[2, 2, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   )
